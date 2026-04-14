@@ -12,12 +12,8 @@ import {
   Target, 
   FileText, 
   Settings,
-  ChevronRight,
-  Loader2
+  ChevronRight
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import FeedbackAnalysis from './components/FeedbackAnalysis';
 import ImpactEvaluator from './components/ImpactEvaluator';
 import CompetitorMap from './components/CompetitorMap';
