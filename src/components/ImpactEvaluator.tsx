@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Zap, Code, Terminal, BarChart3, Info, CheckCircle2, XCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
