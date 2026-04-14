@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FileText, Sparkles, UserCircle, Settings2, Rocket, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
