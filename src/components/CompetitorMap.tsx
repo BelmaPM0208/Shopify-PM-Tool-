@@ -1,8 +1,5 @@
 import { useState } from 'react';
 import { Target, ShieldCheck, ShieldAlert, ExternalLink, Info } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { geminiService } from '@/lib/gemini';
 import { CompetitorFeature } from '@/types';
 
@@ -30,79 +27,83 @@ export default function CompetitorMap({ competitors, onUpdate }: Props) {
 
   return (
     <div className="space-y-6">
-      <Card className="border-[#141414]/10 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
+      {/* Search Card */}
+      <div className="bg-white border border-[#141414]/10 shadow-sm rounded-xl overflow-hidden">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold flex items-center gap-2 mb-1">
             <Target size={18} className="text-[#008060]" />
             Market Intelligence Agent
-          </CardTitle>
-          <CardDescription>Analyze top competitors in your category to see if they offer this feature.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider opacity-50">App Category</label>
-              <Input 
-                placeholder="e.g. Upsell & Cross-sell" 
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="rounded-xl border-[#141414]/10"
-              />
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">Analyze top competitors in your category to see if they offer this feature.</p>
+          
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider opacity-50">App Category</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Upsell & Cross-sell" 
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-4 py-2 rounded-xl border border-[#141414]/10 focus:ring-2 focus:ring-[#008060] outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-wider opacity-50">Feature to Check</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Multi-currency support" 
+                  value={featureName}
+                  onChange={(e) => setFeatureName(e.target.value)}
+                  className="w-full px-4 py-2 rounded-xl border border-[#141414]/10 focus:ring-2 focus:ring-[#008060] outline-none transition-all"
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider opacity-50">Feature to Check</label>
-              <Input 
-                placeholder="e.g. Multi-currency support" 
-                value={featureName}
-                onChange={(e) => setFeatureName(e.target.value)}
-                className="rounded-xl border-[#141414]/10"
-              />
-            </div>
+            <button 
+              onClick={map} 
+              disabled={isMapping || !category || !featureName}
+              className="w-full bg-[#008060] hover:bg-[#006e52] disabled:bg-gray-300 text-white rounded-xl py-2 font-medium transition-colors"
+            >
+              {isMapping ? 'Scanning Competitors...' : 'Map Feature Parity'}
+            </button>
           </div>
-          <Button 
-            onClick={map} 
-            disabled={isMapping || !category || !featureName}
-            className="w-full bg-[#008060] hover:bg-[#006e52] text-white rounded-xl"
-          >
-            {isMapping ? 'Scanning Competitors...' : 'Map Feature Parity'}
-          </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
+      {/* Competitor Grid */}
       {competitors.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {competitors.map((comp, i) => (
-            <Card key={i} className="border-[#141414]/10 shadow-sm hover:border-[#008060]/30 transition-all group">
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-bold">{comp.name}</CardTitle>
-                  <ExternalLink size={14} className="opacity-0 group-hover:opacity-30 transition-opacity" />
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
+            <div key={i} className="bg-white border border-[#141414]/10 shadow-sm rounded-xl p-4 hover:border-[#008060]/30 transition-all group">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-bold">{comp.name}</h4>
+                <ExternalLink size={14} className="opacity-0 group-hover:opacity-30 transition-opacity" />
+              </div>
+              <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   {comp.hasFeature ? (
-                    <Badge className="bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100">
+                    <span className="flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase bg-blue-100 text-blue-700 border border-blue-200">
                       <ShieldCheck size={12} className="mr-1" /> Table Stakes
-                    </Badge>
+                    </span>
                   ) : (
-                    <Badge className="bg-purple-100 text-purple-700 border-purple-200 hover:bg-purple-100">
+                    <span className="flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase bg-purple-100 text-purple-700 border border-purple-200">
                       <ShieldAlert size={12} className="mr-1" /> Differentiator
-                    </Badge>
+                    </span>
                   )}
                 </div>
                 <p className="text-xs text-[#141414]/70 leading-relaxed italic">
                   "{comp.notes}"
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
       )}
 
+      {/* Insight Card */}
       {competitors.length > 0 && (
-        <Card className="bg-[#141414] text-white border-none">
-          <CardContent className="py-6 flex items-center gap-4">
+        <div className="bg-[#141414] text-white rounded-xl overflow-hidden shadow-lg">
+          <div className="p-6 flex items-center gap-4">
             <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center shrink-0">
               <Info size={24} className="text-[#008060]" />
             </div>
@@ -114,8 +115,8 @@ export default function CompetitorMap({ competitors, onUpdate }: Props) {
                   : "Few competitors have this feature. This is a high-value opportunity for differentiation."}
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );
